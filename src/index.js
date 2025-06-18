@@ -55,22 +55,9 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Inicialização do servidor
-const PORT = process.env.PORT || 3000;
-
-const startServer = async () => {
-    try {
-        await initDatabase();
-        app.listen(PORT, () => {
-            console.log(`Servidor rodando na porta ${PORT}`);
-            console.log(`Ambiente: ${process.env.NODE_ENV || 'development'}`);
-        });
-    } catch (error) {
-        console.error('Erro ao iniciar o servidor:', error);
-        process.exit(1);
-    }
-};
-
-startServer();
+// BD (local)
+if (process.env.NODE_ENV !== 'production') {
+    initDatabase().catch(console.error);
+}
 
 module.exports = app; 
