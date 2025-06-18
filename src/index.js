@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const { initDatabase } = require('./db/initDb');
 
 const dadosPessoaisRoutes = require('./routes/dadosPessoais');
 const formacaoRoutes = require('./routes/formacao');
@@ -46,6 +45,15 @@ app.get('/', (req, res) => {
     });
 });
 
+// Rota de teste para verificar se está funcionando
+app.get('/test', (req, res) => {
+    res.json({
+        status: 'OK',
+        environment: process.env.NODE_ENV || 'development',
+        message: 'Teste de conexão bem-sucedido'
+    });
+});
+
 // Middleware de erro
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -54,10 +62,5 @@ app.use((err, req, res, next) => {
         message: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
 });
-
-// BD (local)
-if (process.env.NODE_ENV !== 'production') {
-    initDatabase().catch(console.error);
-}
 
 module.exports = app; 
